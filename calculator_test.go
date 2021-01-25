@@ -9,6 +9,11 @@ type TestCase struct {
 	a, b float64
 	want float64
 }
+type DivideTestCase struct {
+	a, b          float64
+	want          float64
+	errorExpected bool
+}
 
 var AddTests = []TestCase{
 	{20, 1, 21},
@@ -32,6 +37,14 @@ var MulTests = []TestCase{
 	{-10, -10, 100},
 	{12, -1.5, -18},
 	{43, 0, 0},
+}
+
+var DivTests = []DivideTestCase{
+	{1, 1, 1, false},
+	{312, 0, 0, true},
+	{0, 0, 0, true},
+	{1, 2, 0.5, false},
+	{100, 10000000, 0.00001, false},
 }
 
 func TestAdd(t *testing.T) {
@@ -63,4 +76,20 @@ func TestMultiply(t *testing.T) {
 		}
 	}
 
+}
+
+func TestDivide(t *testing.T) {
+	t.Parallel()
+	for _, c := range DivTests {
+		got, err := calculator.Divide(c.a, c.b)
+		if c.errorExpected && err == nil {
+			t.Errorf("Expected error, got nil")
+		}
+		if !c.errorExpected && err != nil {
+			t.Errorf("Expected no error, got \"%v\"", err)
+		}
+		if c.want != got {
+			t.Errorf("want %f, got %f", c.want, got)
+		}
+	}
 }
