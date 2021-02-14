@@ -2,6 +2,7 @@ package calculator_test
 
 import (
 	"calculator"
+	"math"
 	"testing"
 )
 
@@ -107,9 +108,10 @@ func TestSqrt(t *testing.T) {
 	}{
 		{1, 1, false, "The square root of one is one"},
 		{0, 0, false, "The square root of zero is zero"},
-		{25, 5, false, ""},
-		{0.0002, 0.01414213562373095, false, "The square root of a small fraction"},
-		{-25, 0, true, "Attempting the to get calculate the square root of a negative number returns an error"},
+		{25, 5, false, "The square root of a two digit number"},
+		{1947028, math.Sqrt(1947028), false, "The square root of a large number"},
+		{0.00000002, math.Sqrt(0.00000002), false, "The square root of a small fraction"},
+		{-25, 0, true, "Attempting the to calculate the square root of a negative number returns an error"},
 	}
 	for _, c := range testCases {
 		got, err := calculator.Sqrt(c.a)
