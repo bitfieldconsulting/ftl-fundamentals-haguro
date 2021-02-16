@@ -6,27 +6,39 @@ import (
 )
 
 // Add takes two numbers and returns the result of adding them together.
-func Add(a, b float64) float64 {
-	return a + b
+func Add(a float64, b ...float64) float64 {
+	for _, bb := range b {
+		a += bb
+	}
+	return a
 }
 
 // Subtract takes two numbers and returns the result of subtracting the second
 // from the first.
-func Subtract(a, b float64) float64 {
-	return a - b
+func Subtract(a float64, b ...float64) float64 {
+	for _, bb := range b {
+		a -= bb
+	}
+	return a
 }
 
 // Multiply takes two numbers and returns the result of multiplying them
-func Multiply(a, b float64) float64 {
-	return a * b
+func Multiply(a float64, b ...float64) float64 {
+	for _, bb := range b {
+		a *= bb
+	}
+	return a
 }
 
 // Divide takes two numbers and divides the first one by the second one
-func Divide(a, b float64) (float64, error) {
-	if b == 0 {
-		return 0, errors.New("division by zero")
+func Divide(a float64, b ...float64) (float64, error) {
+	for _, bb := range b {
+		if bb == 0 {
+			return 0, errors.New("division by zero")
+		}
+		a /= bb
 	}
-	return a / b, nil
+	return a, nil
 }
 
 // Sqrt returns the square root of a positive number, an error otherwise.
