@@ -139,3 +139,35 @@ func TestSqrt(t *testing.T) {
 		}
 	}
 }
+func TestEvaluate(t *testing.T) {
+	t.Parallel()
+	var testCases = []struct {
+		expression    string
+		want          float64
+		errorExpected bool
+		name          string
+	}{
+		{"1 + 1", 2, false, "A simple expression containing only signature"},
+		{"2 % 5", 0, true, `An "invalid" operation (unimplemented operation)`},
+		{"51x5.3", 0, true, "An invalid operation"},
+		{"43.75 / 3.5", 12.5, false, "An expression with both operands containing fractions"},
+		{"2/2", 1, false, "An expression containing no spaces"},
+		{"  3- 1.2", 1.8, false, "An expression containing trailing whitespaces"},
+		{"8 * 3 / 9", 0, true, `An "invalid" expression (more than two operands)`},
+		{"yeah, no", 0, true, "An invalid expression"},
+		{"1000/    10   \n	  ", 100, false, "An expression with whitepsace around the second operand"},
+	}
+	for _, c := range testCases {
+		got, err := Evaluate(c.expression)
+		if c.errorExpected && err == nil {
+			t.Errorf("%s: expected error, got nil", c.name)
+		}
+		if !c.errorExpected && err != nil {
+			t.Errorf("%s: expected no errors, got \"%v\"", c.name, err)
+		}
+		if c.want != got {
+			t.Errorf("%s: want %f, got %f", c.name, c.want, got)
+		}
+	}
+
+}
