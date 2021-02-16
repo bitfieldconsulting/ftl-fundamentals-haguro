@@ -1,7 +1,6 @@
-package calculator_test
+package calculator
 
 import (
-	"calculator"
 	"math"
 	"testing"
 )
@@ -25,7 +24,7 @@ func TestAdd(t *testing.T) {
 		{0.0000005133, []float64{0.00000312, 0.000664, 0.0000532, 0.00001}, 0.0007308333, "Adding five very small numbers"},
 	}
 	for _, c := range testCases {
-		got := calculator.Add(c.a, c.b...)
+		got := Add(c.a, c.b...)
 		if c.want != got {
 			t.Errorf("%s: want %f, got %f", c.name, c.want, got)
 		}
@@ -49,7 +48,7 @@ func TestSubtract(t *testing.T) {
 		{0, []float64{-22}, 22, "Subtracting a negative number from zero yields a positive number"},
 	}
 	for _, c := range testCases {
-		got := calculator.Subtract(c.a, c.b...)
+		got := Subtract(c.a, c.b...)
 		if c.want != got {
 			t.Errorf("%s: want %f, got %f", c.name, c.want, got)
 		}
@@ -73,12 +72,11 @@ func TestMultiply(t *testing.T) {
 		{43, []float64{0}, 0, "Multiplying any number by zero yields zero"},
 	}
 	for _, c := range testCases {
-		got := calculator.Multiply(c.a, c.b...)
+		got := Multiply(c.a, c.b...)
 		if c.want != got {
 			t.Errorf("%s: want %f, got %f", c.name, c.want, got)
 		}
 	}
-
 }
 
 func TestDivide(t *testing.T) {
@@ -101,7 +99,7 @@ func TestDivide(t *testing.T) {
 		{100, []float64{10000000}, 0.00001, false, "Dividing a number by a much larger number yields a small fraction"},
 	}
 	for _, c := range testCases {
-		got, err := calculator.Divide(c.a, c.b...)
+		got, err := Divide(c.a, c.b...)
 		if c.errorExpected && err == nil {
 			t.Errorf("%s: expected error, got nil", c.name)
 		}
@@ -129,7 +127,7 @@ func TestSqrt(t *testing.T) {
 		{-25, 0, true, "Attempting the to calculate the square root of a negative number returns an error"},
 	}
 	for _, c := range testCases {
-		got, err := calculator.Sqrt(c.a)
+		got, err := Sqrt(c.a)
 		if c.errorExpected && err == nil {
 			t.Errorf("%s: expected error, got nil", c.name)
 		}
