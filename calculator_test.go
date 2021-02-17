@@ -1,7 +1,6 @@
 package calculator
 
 import (
-	"math"
 	"testing"
 )
 
@@ -82,11 +81,11 @@ func TestMultiply(t *testing.T) {
 func TestDivide(t *testing.T) {
 	t.Parallel()
 	var testCases = []struct {
-		a             float64
-		b             []float64
-		want          float64
-		errorExpected bool
-		name          string
+		a           float64
+		b           []float64
+		want        float64
+		errExpected bool
+		name        string
 	}{
 		{10, []float64{1}, 10, false, "Dividing a number by 1 yields that number"},
 		{99, []float64{1, 1, 1}, 99, false, "Dividing a number by one multiple times yields that same number"},
@@ -100,13 +99,11 @@ func TestDivide(t *testing.T) {
 	}
 	for _, c := range testCases {
 		got, err := Divide(c.a, c.b...)
-		if c.errorExpected && err == nil {
-			t.Errorf("%s: expected error, got nil", c.name)
+		errReceived := err != nil
+		if c.errExpected != errReceived {
+			t.Fatalf("%s: unexpected error status %v", c.name, err)
 		}
-		if !c.errorExpected && err != nil {
-			t.Errorf("%s: expected no errors, got \"%v\"", c.name, err)
-		}
-		if c.want != got {
+		if !errReceived && c.want != got {
 			t.Errorf("%s: want %f, got %f", c.name, c.want, got)
 		}
 	}
@@ -115,26 +112,24 @@ func TestDivide(t *testing.T) {
 func TestSqrt(t *testing.T) {
 	t.Parallel()
 	var testCases = []struct {
-		a, want       float64
-		errorExpected bool
-		name          string
+		a, want     float64
+		errExpected bool
+		name        string
 	}{
 		{1, 1, false, "The square root of one is one"},
 		{0, 0, false, "The square root of zero is zero"},
 		{25, 5, false, "The square root of a two digit number"},
-		{1947028, math.Sqrt(1947028), false, "The square root of a large number"},
-		{0.00000002, math.Sqrt(0.00000002), false, "The square root of a small fraction"},
-		{-25, 0, true, "Attempting the to calculate the square root of a negative number returns an error"},
+		{1947028, 1395.3594518976106, false, "The square root of a large number"},
+		{0.00000002, 0.0001414213562373095, false, "The square root of a small fraction"},
+		{-25, 0, true, "Attempting to calculate the square root of a negative number returns an error"},
 	}
 	for _, c := range testCases {
 		got, err := Sqrt(c.a)
-		if c.errorExpected && err == nil {
-			t.Errorf("%s: expected error, got nil", c.name)
+		errReceived := err != nil
+		if c.errExpected != errReceived {
+			t.Fatalf("%s: unexpected error status %v", c.name, err)
 		}
-		if !c.errorExpected && err != nil {
-			t.Errorf("%s: expected no errors, got \"%v\"", c.name, err)
-		}
-		if c.want != got {
+		if !errReceived && c.want != got {
 			t.Errorf("%s: want %f, got %f", c.name, c.want, got)
 		}
 	}
@@ -142,12 +137,13 @@ func TestSqrt(t *testing.T) {
 func TestEvaluate(t *testing.T) {
 	t.Parallel()
 	var testCases = []struct {
-		expression    string
-		want          float64
-		errorExpected bool
-		name          string
+		expression  string
+		want        float64
+		errExpected bool
+		name        string
 	}{
-		{"1 + 1", 2, false, "A simple expression containing only signature"},
+		{"1 + 1", 2, false, "A simple valid addition expression"},
+		{"10 * 10.0", 100, false, "A simple valid multiplication expression"},
 		{"2 % 5", 0, true, `An "invalid" operation (unimplemented operation)`},
 		{"51x5.3", 0, true, "An invalid operation"},
 		{"43.75 / 3.5", 12.5, false, "An expression with both operands containing fractions"},
@@ -159,13 +155,11 @@ func TestEvaluate(t *testing.T) {
 	}
 	for _, c := range testCases {
 		got, err := Evaluate(c.expression)
-		if c.errorExpected && err == nil {
-			t.Errorf("%s: expected error, got nil", c.name)
+		errReceived := err != nil
+		if c.errExpected != errReceived {
+			t.Fatalf("%s: unexpected error status %v", c.name, err)
 		}
-		if !c.errorExpected && err != nil {
-			t.Errorf("%s: expected no errors, got \"%v\"", c.name, err)
-		}
-		if c.want != got {
+		if !errReceived && c.want != got {
 			t.Errorf("%s: want %f, got %f", c.name, c.want, got)
 		}
 	}

@@ -85,6 +85,8 @@ func Evaluate(e string) (float64, error) {
 		return Multiply(a, b), nil
 	case "/":
 		return Divide(a, b)
+	default:
+		err = errors.New("invalid operation")
 	}
-	return 0, errors.New("invalid operation")
+	return 0, err
 }
