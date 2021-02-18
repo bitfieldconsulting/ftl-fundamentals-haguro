@@ -114,9 +114,8 @@ func TestEvaluate(t *testing.T) {
 		{`Trying to evaluate an unimplemented operation returns an error`, "2 % 5", 0, true},
 		{"Trying to evaluate an invalid operation returns an error", "51x5.3", 0, true},
 		{"An expression with both operands containing fractions", "43.75 / 3.5", 12.5, false},
-		{"An expression containing no spaces", "2/2", 1, false},
-		{"An expression containing trailing whitespaces", "  3- 1.2", 1.8, false},
-		{"An expression with whitepsace around the second operand", "1000/    10   \n	  ", 100, false},
+		{"An expression containing no spaces", "2/2", 0, true},
+		{"An expression with whitepsace around the second operand", "1000/    10   \n	  ", 0, true},
 		{`Trying to evaluate an expression with more than two operands returns an error`, "8 * 3 / 9", 0, true},
 		{"Trying to evalulate a non-expression text returns an error", "yeah, no", 0, true},
 	}

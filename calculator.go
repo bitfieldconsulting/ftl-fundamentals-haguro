@@ -3,11 +3,8 @@ package calculator
 
 import (
 	"errors"
-	"regexp"
-	"strconv"
+	"fmt"
 )
-
-var evalRX *regexp.Regexp = regexp.MustCompile(`^\s*(\d+\.?\d*)\s*([^\d\.])\s*(\d+\.?\d*)\s*$`)
 
 // Add takes two numbers and returns the result of adding them together.
 func Add(a float64, b ...float64) float64 {
@@ -64,26 +61,22 @@ func Sqrt(a float64) (float64, error) {
 
 //Evaluate evaluates a given string expression and returns the result or an error
 func Evaluate(e string) (float64, error) {
-	m := evalRX.FindStringSubmatch(e)
-	if len(m) == 0 {
-		return 0, errors.New("invalid expression")
-	}
-	a, err := strconv.ParseFloat(m[1], 64)
+	var (
+		a, b float64
+		op   rune
+	)
+	_, err := fmt.Sscanf(e, "%f %c %f", &a, &op, &b)
 	if err != nil {
-		return 0, err
+		return 0, errors.New("invalid expression ")
 	}
-	b, err := strconv.ParseFloat(m[3], 64)
-	if err != nil {
-		return 0, err
-	}
-	switch m[2] {
-	case "+":
+	switch op {
+	case '+':
 		return Add(a, b), nil
-	case "-":
+	case '-':
 		return Subtract(a, b), nil
-	case "*":
+	case '*':
 		return Multiply(a, b), nil
-	case "/":
+	case '/':
 		return Divide(a, b)
 	default:
 		err = errors.New("invalid operation")
