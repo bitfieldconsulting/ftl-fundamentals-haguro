@@ -110,7 +110,8 @@ func TestEvaluate(t *testing.T) {
 		errExpected bool
 	}{
 		{"A simple valid addition expression", "1 + 1", 2, false},
-		{"A simple valid multiplication expression", "10 * 10.0", 100, false},
+		{"A simple valid multiplication expression", "10 * 10.5", 105, false},
+		{"A valid expression of subtracting two floats", "3.15 - 12.55", -9.4, false},
 		{`Trying to evaluate an unimplemented operation returns an error`, "2 % 5", 0, true},
 		{"Trying to evaluate an invalid operation returns an error", "51x5.3", 0, true},
 		{"An expression with both operands containing fractions", "43.75 / 3.5", 12.5, false},

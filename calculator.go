@@ -4,6 +4,7 @@ package calculator
 import (
 	"errors"
 	"fmt"
+	"strings"
 )
 
 // Add takes two numbers and returns the result of adding them together.
@@ -65,10 +66,15 @@ func Evaluate(e string) (float64, error) {
 		a, b float64
 		op   rune
 	)
-	_, err := fmt.Sscanf(e, "%f %c %f", &a, &op, &b)
+	r := strings.NewReader(e)
+	_, err := fmt.Fscanf(r, "%f %c %f", &a, &op, &b)
 	if err != nil {
-		return 0, errors.New("invalid expression ")
+		return 0, fmt.Errorf("bad expression %q: %v", e, err)
 	}
+	if r.Len() > 0 {
+		return 0, fmt.Errorf("bad expression %q: expression has further content", e)
+	}
+
 	switch op {
 	case '+':
 		return Add(a, b), nil
@@ -79,7 +85,6 @@ func Evaluate(e string) (float64, error) {
 	case '/':
 		return Divide(a, b)
 	default:
-		err = errors.New("invalid operation")
+		return 0, fmt.Errorf("bad expression %q: invalid operation %q", e, op)
 	}
-	return 0, err
 }
