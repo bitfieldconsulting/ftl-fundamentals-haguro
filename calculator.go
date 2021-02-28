@@ -8,39 +8,43 @@ import (
 )
 
 // Add takes two (or more) numbers and returns the result of adding them together.
-func Add(a, b float64, c ...float64) float64 {
+func Add(a, b float64, extras ...float64) float64 {
 	a += b
-	for _, cc := range c {
-		a += cc
+	for _, c := range extras {
+		a += c
 	}
 	return a
 }
 
 // Subtract takes two (or more) numbers and returns the result of subtracting them
-func Subtract(a, b float64, c ...float64) float64 {
+func Subtract(a, b float64, extras ...float64) float64 {
 	a -= b
-	for _, cc := range c {
-		a -= cc
+	for _, c := range extras {
+		a -= c
 	}
 	return a
 }
 
 // Multiply takes two (or more) numbers and returns the result of multiplying them
-func Multiply(a, b float64, c ...float64) float64 {
+func Multiply(a, b float64, extras ...float64) float64 {
 	a *= b
-	for _, cc := range c {
-		a *= cc
+	for _, c := range extras {
+		a *= c
 	}
 	return a
 }
 
 // Divide takes two (or more) numbers and divides the them by each other
-func Divide(a, b float64, c ...float64) (float64, error) {
-	for _, cc := range append([]float64{b}, c...) {
-		if cc == 0 {
+func Divide(a, b float64, extras ...float64) (float64, error) {
+	if b == 0 {
+		return 0, errors.New("division by zero")
+	}
+	a /= b
+	for _, c := range extras {
+		if c == 0 {
 			return 0, errors.New("division by zero")
 		}
-		a /= cc
+		a /= c
 	}
 	return a, nil
 }
